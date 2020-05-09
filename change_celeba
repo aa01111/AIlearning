@@ -1,0 +1,27 @@
+#把celeba变成(108，88，3)
+#连续编号
+
+def change_celeba():
+  imgDir = 'CelebA/trainB_t'
+  testDir = 'CelebA/trainA'
+
+  imgs = os.listdir(imgDir)
+  imgNum = (int)(len(imgs))
+
+  testimgs = os.listdir(testDir)
+  partOfTestNum =(int) (len(testimgs)/10)
+
+  trainNum = 40000
+  restOfTestNum = imgNum - trainNum
+  testNum =  restOfTestNum + partOfTestNum
+
+  X_train = np.empty((trainNum,108,88,3),dtype=np.uint8)
+  X_test = np.empty((testNum, 108, 88, 3), dtype=np.uint8)
+  #分别加载训练集和测试集
+
+  for i in range (trainNum):
+    img = Image.open(imgDir+'/'+imgs[i+1])
+    arr = np.asarray(img)
+    X_train[i] = cv2.cvtColor(cv2.resize(arr, (88, 108), interpolation=cv2.INTER_CUBIC),cv2.COLOR_BGR2RGB)
+    cv2.imwrite("CelebA/trainB/%06d.jpg" % (i+1),X_train[i])
+    print("yes")
